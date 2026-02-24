@@ -1,0 +1,5 @@
+
+bq_data_load/service_account.json
+spotify_playlist_dbt/target/
+spotify_playlist_dbt/dbt_packages/
+spotify_playlist_dbt/logs/

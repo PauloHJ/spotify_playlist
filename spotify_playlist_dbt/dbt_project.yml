@@ -1,0 +1,14 @@
+name: 'spotify_playlist'
+version: '1.0.0'
+config-version: 2
+profile: 'spotify_playlist'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+models:
+  +persist_docs:
+    relation: true
+    columns: true

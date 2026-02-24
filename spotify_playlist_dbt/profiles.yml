@@ -1,0 +1,9 @@
+spotify_playlist:
+  target: dev
+  outputs:
+    dev:
+      dataset: "{{ env_var('DBT_DATASET')}}"
+      location: europe-west1
+      project: "{{ env_var('DBT_PROEJCT')}}"
+      type: bigquery
+      method: oauth

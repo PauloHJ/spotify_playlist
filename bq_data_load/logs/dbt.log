@@ -1,0 +1,16 @@
+[0m08:34:18.921562 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1096790d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109d2d730>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109d2d460>]}
+
+
+============================== 08:34:18.932299 | fbb09895-b4b4-41a8-9bf8-32cc3a177323 ==============================
+[0m08:34:18.932299 [info ] [MainThread]: Running with dbt=1.9.1
+[0m08:34:18.932755 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/paulo.hernandez/.dbt', 'debug': 'False', 'warn_error': 'None', 'log_path': 'logs', 'version_check': 'True', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt build --select stg_playlist', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m08:34:18.933131 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/paulo.hernandez/Documents/MVBX/GH/spotify_playlist_revision/bq_data_load/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m08:34:18.940877 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.12094329, "process_in_blocks": "0", "process_kernel_time": 0.534769, "process_mem_max_rss": "106053632", "process_out_blocks": "0", "process_user_time": 1.437232}
+[0m08:34:18.941459 [debug] [MainThread]: Command `dbt build` failed at 08:34:18.941363 after 0.12 seconds
+[0m08:34:18.941784 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1098d0fb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109cb7110>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109cb7170>]}
+[0m08:34:18.942080 [debug] [MainThread]: Flushing usage events
+[0m08:34:19.443514 [debug] [MainThread]: An error was encountered while trying to flush usage events
