@@ -9,3 +9,8 @@ sources:
       - name: playlist_summary_external
         location: europe-west1
         description: Serving table for playlist data.
+        loaded_at_field: meta_change_timestamp
+        freshness:
+          warn_after:
+            count: 1
+            period: day

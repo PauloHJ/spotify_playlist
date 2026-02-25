@@ -13,21 +13,35 @@ models:
         data_tests:
           - not_null
           - unique
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 87
+              max_value: 87
+              where: "owner != 'spotify'"
       - name: owner
         description: Playlist owner, Spotify username
         data_type: string
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 32
+              max_value: 32
+              where: "owner != 'spotify'"
       - name: streams
         description: Number of streams from playlist today
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: stream30s
         description: Number of streams over 30 sec from playlist today
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+          - dbt_utils.expression_is_true:
+              expression: "<= streams"
       - name: dau
         description: Number of Daily Active Users. Users with a stream over 30 sec from playlist today
         data_type: int
@@ -58,16 +72,25 @@ models:
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: skippers
         description: Number of users who skipped more than 90 percent of their streams today
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+          - dbt_utils.expression_is_true:
+              expression: "<= users"
       - name: owner_country
         description: Country of the playlist owner
         data_type: string
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 2
+              max_value: 2
       - name: n_tracks
         description: Number of tracks in playlist
         data_type: int
@@ -78,6 +101,8 @@ models:
         data_type: int
         data_tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: "<= n_tracks"
       - name: n_artists
         description: Number of unique artists in playlist
         data_type: int
@@ -93,23 +118,33 @@ models:
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: monthly_owner_stream30s
         description: Number of streams over 30 seconds by playlist owner this month,
         data_type: int
         data_tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+          - dbt_utils.expression_is_true:
+              expression: "<= monthly_stream30s"
       - name: playlist_tokens
         description: List of playlist title tokens, stopwords and punctuation removed
         data_type: array<string>
-        data_tests:
-          - not_null
       - name: playlist_genre
-        description: No. 1 Genre by weight of playlist tracks, from Gracenote metadata
-        data_type: array<string>
-        data_tests:
-          - not_null
+        description: List of playlist genres order by weight of playlist tracks, from Gracenote metadata, being first one the one with highest weight
+        data_type: array<struct<genre string, genre_rank int>>
+        columns:
+            - name: genre
+              description: "Genre name"
+            - name: genre_rank
+              description: "Rank position (1 = highest weight)"
       - name: playlist_mood
-        description: No. 1 Mood by weight of playlist tracks, from Gracenote metadata
-        data_type: array<string>
-        data_tests:
-          - not_null
+        description: List of playlist mood order by weight of playlist tracks, from Gracenote metadata, being first one the one with highest weight
+        data_type: array<struct<mood string, mood_rank int>>
+        columns:
+            - name: mood
+              description: "Genre name"
+            - name: mood_rank
+              description: "Rank position (1 = highest weight)"

@@ -21,6 +21,7 @@ expanded_token as (
         array(
             select distinct trim(token)
             from unnest(split(REGEXP_REPLACE(tokens, r'[\[\]]', ''), ',')) as token
+            where trim(token) != ""
         ) as playlist_tokens
     from escaped_unicode
 ),
@@ -30,9 +31,15 @@ clean_genre_mood as (
         * except (genre_1, genre_2, genre_3, mood_1, mood_2, mood_3),
         {% for col in ["genre", "mood"] %}
             array(
-                select distinct {{ col }}
+                select distinct {{ col }}_list
                 from
-                    unnest([{{ col }}_1, {{ col }}_2, {{ col }}_3]) as {{ col }}
+                    unnest(
+                        [
+                            struct({{ col }}_1 as {{ col }}, 1 as {{ col }}_rank),
+                            struct({{ col }}_2 as {{ col }}, 2 as {{ col }}_rank),
+                            struct({{ col }}_3 as {{ col }}, 3 as {{ col }}_rank)
+                        ]
+                        ) as {{ col }}_list
                 where
                     {{ col }} is not null
                     and {{ col }} != '-'
