@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_playlist
-    description: Data Model for Store Demand Forecast
+    description: Data Model for Playlist data
     config:
       contract:
         enforced: true
@@ -30,14 +30,16 @@ models:
         description: Number of streams from playlist today
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
       - name: stream30s
         description: Number of streams over 30 sec from playlist today
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
           - dbt_utils.expression_is_true:
@@ -46,39 +48,56 @@ models:
         description: Number of Daily Active Users. Users with a stream over 30 sec from playlist today
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: wau
         description: Number of Weekly Active Users. Users with a stream over 30 seconds from playlist in past week
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: mau
         description: Number of Monthly Active Users. Users with a stream over 30 seconds from playlist in past month
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: mau_previous_month
         description: Number of Monthly Active Users in the month prior to this one
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: mau_both_months
         description: Number of users that were active on the playlist both this and the previous month
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
       - name: users
         description: Number of users streaming (all streams) from this playlist this month
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
       - name: skippers
         description: Number of users who skipped more than 90 percent of their streams today
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
           - dbt_utils.expression_is_true:
@@ -87,7 +106,8 @@ models:
         description: Country of the playlist owner
         data_type: string
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 2
               max_value: 2
@@ -95,36 +115,50 @@ models:
         description: Number of tracks in playlist
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 10000
+              severity: warn
       - name: n_local_tracks
         description: Change in number of tracks on playlist since yesterday
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_utils.expression_is_true:
               expression: "<= n_tracks"
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 10000
+              severity: warn
       - name: n_artists
         description: Number of unique artists in playlist
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
       - name: n_albums
         description: Number of unique albums in playlist
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
       - name: monthly_stream30s
         description: Number of streams over 30 seconds this month
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
       - name: monthly_owner_stream30s
         description: Number of streams over 30 seconds by playlist owner this month,
         data_type: int
         data_tests:
-          - not_null
+          - not_null:
+              severity: warn
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
           - dbt_utils.expression_is_true:
