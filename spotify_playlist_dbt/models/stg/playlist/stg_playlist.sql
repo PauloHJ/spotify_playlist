@@ -2,60 +2,27 @@
 
 with source as (
     select *
-    from {{ source('playlist_dataset', 'playlist_revision_raw') }}
+    from {{ source('playlist_dataset', 'playlist_summary_external') }}
 ),
 
--- Removing identified duplicates
-deduplicated_playlist as (
-    select *
+-- Transforming UNICODE text
+escaped_unicode as (
+    select
+        * except(tokens),
+        json_value(concat('"', tokens, '"')) as tokens
     from source
-    qualify
-        1 = row_number() over (partition by playlist_uri)
 ),
 
--- Inconsistent owner (username) hashing
--- Escalated to source team, protecting owner in the meantime
-hashed_owner as (
-    select
-        *,
-        case
-            when
-                (
-                    (
-                        length(owner) = 32
-                        and regexp_contains(owner, r'^[a-f0-9]+$')
-                    )
-                    or owner = 'spotify'
-                ) then owner
-            else to_hex(md5(owner))
-        end as hash_owner
-    from deduplicated_playlist
-),
-
--- Propagating owner hashing into playlist_uri
-hashed_playlist_uri as (
-    select
-        * except (playlist_uri, owner, hash_owner),
-        hash_owner as owner,
-        if(
-            owner != hash_owner,
-            regexp_replace(playlist_uri, owner, hash_owner),
-            playlist_uri
-        ) as playlist_uri
-    from hashed_owner
-),
-
--- Converting token JSON -> ARRAY
--- Removing leftover quotes
+-- Converting into ARRAY structure
 -- Treating duplicate tokens
 expanded_token as (
     select
-        * except (tokens),
+        * except(tokens),
         array(
-            select distinct trim(array_tokens, '"') as clean_tokens
-            from unnest(json_extract_array(tokens)) as array_tokens
+            select distinct trim(token)
+            from unnest(split(REGEXP_REPLACE(tokens, r'[\[\]]', ''), ',')) as token
         ) as playlist_tokens
-    from hashed_playlist_uri
+    from escaped_unicode
 ),
 
 clean_genre_mood as (
@@ -74,17 +41,6 @@ clean_genre_mood as (
             {% if not loop.last %},{% endif %}
         {% endfor %}
     from expanded_token
-),
-
--- Cast Premium MAU fields from FLOAT -> INT
-type_casting as (
-    select
-        * except (premium_mau, premium_mau_previous_month),
-        {% for col in ["premium_mau", "premium_mau_previous_month"] %}
-            cast({{ col }} as int64) as {{ col }}
-            {% if not loop.last %},{% endif %}
-        {% endfor %}
-    from clean_genre_mood
 )
 
 select
@@ -108,9 +64,5 @@ select
     monthly_owner_stream30s,
     playlist_tokens,
     playlist_genre,
-    playlist_mood,
-    premium_mau_previous_month,
-    premium_mau,
-    mau_premium_ratio,
-    mau_previous_month_premium_ratio
-from type_casting
+    playlist_mood
+from clean_genre_mood

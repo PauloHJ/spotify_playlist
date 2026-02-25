@@ -69,26 +69,6 @@ PLAYLIST_REVISION_SCHEMA = [
         "mood_3", "STRING", description="No. 3 Mood by weight of playlist tracks, from Gracenote metadata"
     ),
     bigquery.SchemaField(
-        "premium_mau_previous_month",
-        "FLOAT",
-        description="Number of Monthly Active Users in the month prior to this one that had a Premium subscription. A subset of mau_previous_months (as defined above).",
-    ),
-    bigquery.SchemaField(
-        "premium_mau",
-        "FLOAT",
-        description="Number of Monthly Active Users that have a Premium subscription. A subset of mau (as defined above).",
-    ),
-    bigquery.SchemaField(
-        "mau_premium_ratio",
-        "FLOAT",
-        description="Proportion of Monthly Active Users in past month with Premium subscription, calculated as premium_mau divided by mau.",
-    ),
-    bigquery.SchemaField(
-        "mau_previous_month_premium_ratio",
-        "FLOAT",
-        description="Proportion of Monthly Active Users in the month prior to this one with Premium subscription, calculated as premium_mau_previous_month divided by mau_previous_month.",
-    ),
-    bigquery.SchemaField(
         "meta_change_timestamp", "TIMESTAMP", description="Date and time of record creation/change. UTC."
     ),
     bigquery.SchemaField("meta_integration_identifier", "STRING", description="Source data origin"),

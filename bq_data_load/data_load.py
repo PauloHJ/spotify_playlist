@@ -14,11 +14,10 @@ client = bigquery.Client.from_service_account_json(service_account_path, project
 
 # Metadata fields added for tracking
 df = pd.read_csv(file_path, sep="\t", index_col=0)
+df["meta_change_timestamp"] = pd.Timestamp.now()
+df["meta_integration_identifier"] = file_path
 
-
-job_config = bigquery.LoadJobConfig(
-    # schema=PLAYLIST_REVISION_SCHEMA
-)
+job_config = bigquery.LoadJobConfig(schema=PLAYLIST_REVISION_SCHEMA)
 
 with open(file_path, "rb") as source_file:
     load_job = client.load_table_from_dataframe(df, f"{project_id}.{dataset_id}.{table_id}", job_config=job_config)

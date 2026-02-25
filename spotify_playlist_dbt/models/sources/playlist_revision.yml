@@ -2,10 +2,10 @@ version: 1
 
 sources:
   - name: playlist_dataset
-    database: "{{ env_var('DBT_PROEJCT')}}"
+    database: "{{ env_var('DBT_PROJECT')}}"
     schema: "{{ env_var('DBT_DATASET')}}"
     description: Dataset used for playlist and stream data.
     tables:
-      - name: playlist_revision_raw
+      - name: playlist_summary_external
         location: europe-west1
         description: Serving table for playlist data.

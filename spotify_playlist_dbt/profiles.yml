@@ -4,6 +4,6 @@ spotify_playlist:
     dev:
       dataset: "{{ env_var('DBT_DATASET')}}"
       location: europe-west1
-      project: "{{ env_var('DBT_PROEJCT')}}"
+      project: "{{ env_var('DBT_PROJECT')}}"
       type: bigquery
       method: oauth
